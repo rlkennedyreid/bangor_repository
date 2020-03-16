@@ -7,6 +7,8 @@
 #include <array>
 #include <unordered_map>
 #include <cctype>
+#include <random>
+#include <chrono>
 
 
 #include <boost/algorithm/hex.hpp>
@@ -45,8 +47,30 @@ const std::unordered_map <char , int> HEX_MAP{
 
 };
 
+const std::unordered_map <int, char> ANTI_HEX_MAP{
+    {0, '0'},
+    {1, '1'},
+    {2, '2'},
+    {3, '3'},
+    {4, '4'},
+    {5, '5'},
+    {6, '6'},
+    {7, '7'},
+    {8, '8'},
+    {9, '9'},
+    {10, 'a'},
+    {11, 'b'},
+    {12, 'c'},
+    {13, 'd'},
+    {14, 'e'},
+    {15, 'f'}
+
+};
+
 void orderedHexXOR(const std::string& short_string, const std::string& long_string, std::stringstream& stream)
 {
+    assert(long_string.size() >= short_string.size());
+
     size_t size_diff = long_string.size() - short_string.size();
 
     for (size_t i{ 0 }; i < long_string.size(); i++)
@@ -56,6 +80,8 @@ void orderedHexXOR(const std::string& short_string, const std::string& long_stri
         else
             stream << std::hex << (HEX_MAP.at(short_string[i - size_diff]) ^ HEX_MAP.at(long_string[i]));
     }
+
+    
 }
 
 std::string hexStringsXOR(const std::string& string_1, const std::string& string_2)
@@ -69,28 +95,42 @@ std::string hexStringsXOR(const std::string& string_1, const std::string& string
     return stream.str();
 
 }
+int getRandomNumber(int lower_limit, int upper_limit)
+{
+    static unsigned int random_generator_seed(std::chrono::system_clock::now().time_since_epoch().count());
+
+    static std::default_random_engine generator{ random_generator_seed };
+
+    static std::uniform_int_distribution<int> distribution(lower_limit, upper_limit);
+
+    return distribution(generator);
+}
+
+std::string createRandomHexKey(int key_length)
+{
+    std::stringstream stream;
+
+    for (int i{ 0 }; i < key_length; i++)
+        stream << ANTI_HEX_MAP.at(getRandomNumber(0, 15));
+
+    return stream.str();
+}
 
 int main()
 {
     using boost::algorithm::hex;
     using boost::algorithm::unhex;
-    std::string xored_ciphers = hexStringsXOR(CIPHER_TEXTS[0], CIPHER_TEXTS[7]);
 
-    for (size_t i{ 0 }; i < xored_ciphers.size(); i++)
+    for (size_t i{ 0 }; i < CIPHER_TEXTS[0].size(); i += 2)
     {
-        std::string load_of_spaces = hex(std::string{ "the" });
-        for (size_t j{ 3 }; j < i; j+=2)
-            load_of_spaces.append("00");
-
-        assert(load_of_spaces.size() < xored_ciphers.size());
-        std::string cribbed_string = hexStringsXOR(load_of_spaces, xored_ciphers);
-        std::cout << unhex(cribbed_string) << std::endl;
-
+        if (i + 2 < CIPHER_TEXTS[0].size())
+        {
+            auto substring = CIPHER_TEXTS[0].substr(i, 2);
+            std::cout << "Original:" << unhex(substring) << std::endl;
+            std::cout << "XORed:" << unhex(hexStringsXOR(substring, hex(std::string{ ' ' }))) << std::endl << std::endl;
+        }
     }
 
-
-    //for (const auto& letter : alphabet)
-    //   std::cout << boost::algorithm::unhex(hexStringsXOR(boost::algorithm::hex(std::string{ letter }), boost::algorithm::hex(std::string{ ' ' }))) << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
