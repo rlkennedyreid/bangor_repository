@@ -3,8 +3,6 @@
 
 #include "logistic_map.h"
 
-#include "boost/filesystem.hpp"
-
 int main()
 {
     constexpr int n = 10000;
@@ -12,13 +10,9 @@ int main()
     constexpr double x = 0.314;
 
     const std::string output_directory{ "C:/Users/rbk20xqk/Documents/google_backup/data/logistic_map/" };
-
-    boost::filesystem::remove_all(output_directory);
-    boost::filesystem::create_directory(output_directory);
-      
-    outputLogisticSequence(output_directory + "sequence.csv", n, r, x);
-
+    
     outputLogisticBifurcationDiagramData(output_directory + "bifurcation.csv");
+    outputLogisticLyapunovData(output_directory + "lyapunov.csv");
 
     return 0;
 }

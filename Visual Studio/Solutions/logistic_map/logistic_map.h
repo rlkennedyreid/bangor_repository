@@ -21,15 +21,17 @@ void inline printIntoFilestream(std::ofstream& file_stream, double double_val1, 
 
 /*!
 	\brief Function to print out a logistic map time series to a file
-	\param[in] output_file The full file directory of the file to output to
+	\param[out] file_stream The filestream to output to
 	\param[in] num_iterations The number of map iterations to print
 	\param[in] r r-value of the map
 	\param[in] x_initial the initial x-value
 */
-void outputLogisticSequence(const std::string& output_file, int num_iterations, double r, double x_initial);
+void outputLogisticSequence(std::ofstream& file_stream, int num_iterations, double r, double x_initial);
 
 /*!
 	\brief Function to print out a logistic map bifurcation diagram data to a file
 	\param[in] output_file The full file directory of the file to output to
 */
 void outputLogisticBifurcationDiagramData(const std::string& output_file);
+
+void outputLogisticLyapunovData(const std::string& output_file);
