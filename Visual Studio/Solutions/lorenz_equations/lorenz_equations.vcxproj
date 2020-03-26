@@ -146,11 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lorenz.cpp" />
     <ClCompile Include="lorenz_equations.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="push_back_local_maxima.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lorenz.h" />
+    <ClInclude Include="lorenz_aliases.h" />
     <ClInclude Include="lorenz_equations.h" />
+    <ClInclude Include="push_back_local_maxima.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

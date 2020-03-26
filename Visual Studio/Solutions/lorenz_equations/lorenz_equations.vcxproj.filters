@@ -21,9 +21,24 @@
     <ClCompile Include="lorenz_equations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="push_back_local_maxima.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lorenz.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lorenz_equations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lorenz_aliases.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="push_back_local_maxima.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lorenz.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

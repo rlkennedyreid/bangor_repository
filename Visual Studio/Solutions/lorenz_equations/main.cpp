@@ -6,7 +6,6 @@ const std::string output_directory{ "C:/Users/rbk20xqk/Documents/google_backup/d
 
 int main()
 {
-	//outputLorenzAttractorData(output_directory + "lorenz_sequence.csv");
+	outputLorenzAttractorData(output_directory + "lorenz_sequence.csv");
 	outputLorenzBifurcationDiagramData(output_directory + "lorenz_bifurcation.csv");
-
 }
