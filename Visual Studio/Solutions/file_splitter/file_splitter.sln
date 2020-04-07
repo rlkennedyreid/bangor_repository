@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "file_splitter", "file_splitter.vcxproj", "{89A84957-3BF4-4208-B0B5-1E417B960AA3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Debug|x64.ActiveCfg = Debug|x64
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Debug|x64.Build.0 = Debug|x64
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Debug|x86.ActiveCfg = Debug|Win32
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Debug|x86.Build.0 = Debug|Win32
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Release|x64.ActiveCfg = Release|x64
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Release|x64.Build.0 = Release|x64
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Release|x86.ActiveCfg = Release|Win32
+		{89A84957-3BF4-4208-B0B5-1E417B960AA3}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5D35E0DB-5CD2-4F23-92EC-70D34D9D75CC}
+	EndGlobalSection
+EndGlobal
