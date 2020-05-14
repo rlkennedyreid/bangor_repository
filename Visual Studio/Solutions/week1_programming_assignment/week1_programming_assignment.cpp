@@ -121,15 +121,17 @@ int main()
     using boost::algorithm::hex;
     using boost::algorithm::unhex;
 
-    for (size_t i{ 0 }; i < CIPHER_TEXTS[0].size(); i += 2)
-    {
-        if (i + 2 < CIPHER_TEXTS[0].size())
-        {
-            auto substring = CIPHER_TEXTS[0].substr(i, 2);
-            std::cout << "Original:" << unhex(substring) << std::endl;
-            std::cout << "XORed:" << unhex(hexStringsXOR(substring, hex(std::string{ ' ' }))) << std::endl << std::endl;
-        }
-    }
+    //for (size_t i{ 0 }; i < CIPHER_TEXTS[0].size(); i += 2)
+    //{
+    //    if (i + 2 < CIPHER_TEXTS[0].size())
+    //    {
+    //        auto substring = CIPHER_TEXTS[0].substr(i, 2);
+    //        std::cout << "Original:" << unhex(substring) << std::endl;
+    //        std::cout << "XORed:" << unhex(hexStringsXOR(substring, hex(std::string{ ' ' }))) << std::endl << std::endl;
+    //    }
+    //}
+
+    std::cout << hexStringsXOR(std::string{ "a" }, std::string{ " " });
 
 }
 
