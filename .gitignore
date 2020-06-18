@@ -575,3 +575,9 @@ dmypy.json
 
 # Get rid of typical data outputs!
 *.csv
+*.mat
+*.eps
+
+# Some weird files that keep coming back
+test/
+ConsoleApplication1/
