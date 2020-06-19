@@ -1,8 +1,8 @@
 function timestamp_string = timestampString()
-%TIMESTAMP_STRING Function to produce a formatted, second-accurate
+%TIMESTAMPSTRING Function to produce a formatted, second-accurate
 %timestamp string
-%   Used to timestamp saved figures, and make sure we don't accidentally
-%   overwrite
+%   Used to timestamp saved figures, and make sure I don't accidentally
+%   overwrite files
 
     timestamp_string = datestr(now,'yymmdd_HHMMSS');
 

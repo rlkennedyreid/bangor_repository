@@ -8,8 +8,10 @@ function [num_symbols_per_carrier, real_num_bits] = calcNumSymbolsPerCarrier(DES
 
     num_bits_per_symbol = log2(MODULATION_ORDER);
     
+    % fix to a whole number
     num_symbols_per_carrier = fix(DESIRED_NUM_BITS/(num_bits_per_symbol*NUM_SUBCARRIERS));
     
+    % the actual number of bits we will produce
     real_num_bits = NUM_SUBCARRIERS*num_symbols_per_carrier*num_bits_per_symbol;
     
 end
