@@ -578,6 +578,6 @@ dmypy.json
 *.mat
 *.eps
 
-# Some weird files that keep coming back
-test/
-ConsoleApplication1/
+
+# Matlab autosaves
+*.asv

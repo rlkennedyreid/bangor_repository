@@ -1,4 +1,4 @@
-function symbol_stream = demodSignal(modulated_signal, MOD_ORDER, MODULATION_FORMAT)
+function symbol_stream = decodeSignal(modulated_signal, MOD_ORDER, MODULATION_FORMAT)
     
     if strcmp(MODULATION_FORMAT, 'QAM')
 %         Force the average power of signal to be 1

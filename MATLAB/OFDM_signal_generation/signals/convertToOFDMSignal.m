@@ -11,7 +11,7 @@ function ofdm_signal = convertToOFDMSignal(INPUT_SIGNAL, CYCLIC_PREFIX_LENGTH)
 
 % Produce a symmetric conjugate signal so our ifft produces a real output
 % signal
-    symmetric_conjugate_signal = generateSymmetricConjugate(INPUT_SIGNAL);
+    symmetric_conjugate_signal = calcSymmetricConjugate(INPUT_SIGNAL);
 
     ifft_signal = ifft(symmetric_conjugate_signal);
     
