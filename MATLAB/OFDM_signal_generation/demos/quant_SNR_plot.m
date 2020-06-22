@@ -1,10 +1,8 @@
-clc;
 clearvars;
 
 % Script to calculate the minimum SNR needed to establish a BER of 1e-3
 % for a range of quantisation bit numbers and varying modulation
 % orders/formats
-
 
 % Modulation parameters
 MODULATION_FORMAT = 'QAM';
@@ -16,7 +14,7 @@ DESIRED_NUM_BITS = 1e6;
 CYCLIC_PREFIX_LENGTH = 1/8; % Given as a ratio of symbol length
 
 SNR_values = linspace(5,35, 100);
-quantisation_bit_values = 1:1:20;
+quantisation_bit_values = 1:1:15;
 
 % Number of unique symbols; powers of 2 starting from 16
 MODULATION_ORDERS = 2.^[4,5,6,7,8];
@@ -51,8 +49,7 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
             
             noisey_OFDM_signal = awgn(ofdm_signal, SNR_values(SNR_index), 'measured');
             
-            % Quantise the signal with the desired number of quantisation
-            % bits
+            % Quantise the signal with the desired number of quantisation bits
 
             ofdm_signal_quantised = quantiseSignal(noisey_OFDM_signal, quantisation_bit_values(quant_index));
 
@@ -79,10 +76,20 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
     
 end
 
-legend(strcat(num2str(MODULATION_ORDERS(1),'%u'), '-', MODULATION_FORMAT), strcat(num2str(MODULATION_ORDERS(2),'%u'), '-', MODULATION_FORMAT), strcat(num2str(MODULATION_ORDERS(3),'%u'), '-', MODULATION_FORMAT), strcat(num2str(MODULATION_ORDERS(4),'%u'), '-', MODULATION_FORMAT), strcat(num2str(MODULATION_ORDERS(5),'%u'), '-', MODULATION_FORMAT))
+legend(...
+    strcat(num2str(MODULATION_ORDERS(1),'%u'), '-', MODULATION_FORMAT),...
+    strcat(num2str(MODULATION_ORDERS(2),'%u'), '-', MODULATION_FORMAT),...
+    strcat(num2str(MODULATION_ORDERS(3),'%u'), '-', MODULATION_FORMAT),...
+    strcat(num2str(MODULATION_ORDERS(4),'%u'), '-', MODULATION_FORMAT),...
+    strcat(num2str(MODULATION_ORDERS(5),'%u'), '-', MODULATION_FORMAT),...
+    'Location', 'southwest');
+
 ylim([0, SNR_values(end)]);
 ylabel('Minimum SNR (dB)');
 xlabel('Number of quantisation bits');
+
+full_plot = gcf;
 hold off;
 
-exportgraphics(gcf, strcat(timestampString(), '.pdf'))
+file_name = strcat(MODULATION_FORMAT, '_quant_SNR_plot_', num2str(DESIRED_NUM_BITS, 1), '_bits_', timestampString());
+exportPlotPDF(full_plot, file_name);

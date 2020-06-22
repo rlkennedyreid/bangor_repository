@@ -578,6 +578,7 @@ dmypy.json
 
 # directories whos content we would like to ignore
 MATLAB/OFDM_signal_generation/figures/*
+MATLAB/OFDM_signal_generation/data/*
 thirdparty/*
 
 # Put a keep file in them so the folders stay
