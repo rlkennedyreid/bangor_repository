@@ -581,3 +581,7 @@ dmypy.json
 
 # Matlab autosaves
 *.asv
+
+# directories
+./MATLAB/OFDM_signal_generation/figures/*
+./thirdparty/*
