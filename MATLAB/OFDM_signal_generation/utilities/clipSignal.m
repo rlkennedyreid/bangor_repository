@@ -1,4 +1,4 @@
-function [clipped_signal, num_changes, change_ratio] = clipSignal(INPUT_SIGNAL, CLIPPING_RATIO_DB)
+function [clipped_signal, num_changes, change_ratio, max_amplitude] = clipSignal(INPUT_SIGNAL, CLIPPING_RATIO_DB)
 %CLIPSIGNAL Function to clip a signal, given the signal and the clipping
 %ratio in dB
     

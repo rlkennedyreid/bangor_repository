@@ -1,15 +1,21 @@
-function [quantised_signal] = quantiseSignal(SIGNAL, NUM_QUANTISATION_BITS)
+function [quantised_signal] = quantiseSignal(SIGNAL, NUM_QUANTISATION_BITS, amplitude_limit)
 %QUANTISESIGNAL Function to quantise a given signal into discrete levels
 %   The number of levels is 2^NUM_QUANTISATION_BITS. The min and max level
 %   is always the min and max of the original signal. Levels are evenly
 %   spaced.
 
     assert(NUM_QUANTISATION_BITS > 0, 'Number of quantisation bits must be a positive integer');
-    
     num_quant_levels = 2^NUM_QUANTISATION_BITS;
-
-    minimum_val = min(SIGNAL);
-    maximum_val = max(SIGNAL);
+    
+    switch nargin
+        case 2
+            minimum_val = min(SIGNAL);
+            maximum_val = max(SIGNAL);
+        case 3
+            abs_limit = abs(amplitude_limit);
+            minimum_val = -abs_limit;
+            maximum_val = abs_limit;
+    end
     
     % For N levels, there are N-1 spaces
     quant_spacing = abs((maximum_val-minimum_val)/(num_quant_levels-1));

@@ -7,4 +7,3 @@ function [symbol_stream] = calcRandomSymbolStream(MODULATION_ORDER,NUM_SUBCARRIE
 
     symbol_stream = randi([0, (MODULATION_ORDER-1)], [NUM_SUBCARRIERS, NUM_SYMBOLS_PER_CARRIER]);
 end
-

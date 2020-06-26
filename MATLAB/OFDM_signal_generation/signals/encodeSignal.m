@@ -24,10 +24,16 @@ function [output_signal] = encodeSignal(SYMBOL_STREAM, ORDER, MODULATION_FORMAT)
     if strcmp(MODULATION_FORMAT, 'QAM')
         % Need to normalise amplitude-based modulation
         output_signal = qammod(SYMBOL_STREAM, ORDER, 'UnitAveragePower', true);
+        
+    elseif strcmp(MODULATION_FORMAT, 'QAM_binary')
+        output_signal = qammod(SYMBOL_STREAM, ORDER, 'bin', 'UnitAveragePower', true);
+        
     elseif strcmp(MODULATION_FORMAT, 'PSK')
         output_signal = pskmod(SYMBOL_STREAM, ORDER);
+        
     else
         error("Unknown argument for MODULATION_FORMAT");
+        
     end
 
 end

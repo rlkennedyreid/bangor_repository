@@ -5,11 +5,11 @@ clearvars;
 % orders/formats
 
 % Modulation parameters
-MODULATION_FORMAT = 'QAM';
+MODULATION_FORMAT = 'QAM_binary';
 
-NUM_SUBCARRIERS = 7;
+NUM_SUBCARRIERS = 63;
 
-DESIRED_NUM_BITS = 1e6;
+DESIRED_NUM_BITS = 1e5;
 
 CYCLIC_PREFIX_LENGTH = 1/8; % Given as a ratio of symbol length
 
@@ -19,6 +19,7 @@ quantisation_bit_values = 1:1:15;
 % Number of unique symbols; powers of 2 starting from 16
 MODULATION_ORDERS = 2.^[4,5,6,7,8];
 
+hold on;
 for order_index = 1:1:numel(MODULATION_ORDERS)
     
     % Generate our random symbol stream
@@ -39,19 +40,21 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
     % because if minimums are not found, these points will not be plotted
     
     minimum_SNR_values = NaN(size(quantisation_bit_values));
+    
+    noisey_OFDM_signals = zeros(numel(SNR_values), numel(ofdm_signal));
+    
+    for SNR_index = 1:1:numel(SNR_values)
+        noisey_OFDM_signals(SNR_index, :) = awgn(ofdm_signal, SNR_values(SNR_index), 'measured');
+    end
 
     for quant_index = 1:1:numel(quantisation_bit_values)
+        disp(strcat("Processing order ", num2str(modulation_order,'%u'), " with ", num2str(quant_index,'%u'), " quantisation bits"))
 
         for SNR_index = 1:1:numel(SNR_values)
             
-            % Add AWGN at the desired SNR. We use the same original OFDM
-            % signal at each pass through this loop
-            
-            noisey_OFDM_signal = awgn(ofdm_signal, SNR_values(SNR_index), 'measured');
-            
             % Quantise the signal with the desired number of quantisation bits
 
-            ofdm_signal_quantised = quantiseSignal(noisey_OFDM_signal, quantisation_bit_values(quant_index));
+            ofdm_signal_quantised = quantiseSignal(noisey_OFDM_signals(SNR_index, :), quantisation_bit_values(quant_index));
 
             extracted_encoded_signal = convertFromOFDMSignal(ofdm_signal_quantised, NUM_SUBCARRIERS, CYCLIC_PREFIX_LENGTH);
 
@@ -72,16 +75,37 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
     
     % Plot for each modulation order
     plot(quantisation_bit_values, minimum_SNR_values);
-    hold on;
     
 end
 
+load(fullfile(fileparts(which("qam_16.mat")), "qam_16.mat"));
+load(fullfile(fileparts(which("qam_32.mat")), "qam_32.mat"));
+load(fullfile(fileparts(which("qam_64.mat")), "qam_64.mat"));
+load(fullfile(fileparts(which("qam_128.mat")), "qam_128.mat"));
+load(fullfile(fileparts(which("qam_256.mat")), "qam_256.mat"));
+
+quick_plot = @(data) plot(data(:, 1), data(:, 2), '--');
+
+quick_plot(qam_16);
+quick_plot(qam_32);
+quick_plot(qam_64);
+quick_plot(qam_128);
+quick_plot(qam_256);
+
+
+leg_string = @(mod_order) strcat(num2str(mod_order,'%u'), '-', MODULATION_FORMAT);
+
 legend(...
-    strcat(num2str(MODULATION_ORDERS(1),'%u'), '-', MODULATION_FORMAT),...
-    strcat(num2str(MODULATION_ORDERS(2),'%u'), '-', MODULATION_FORMAT),...
-    strcat(num2str(MODULATION_ORDERS(3),'%u'), '-', MODULATION_FORMAT),...
-    strcat(num2str(MODULATION_ORDERS(4),'%u'), '-', MODULATION_FORMAT),...
-    strcat(num2str(MODULATION_ORDERS(5),'%u'), '-', MODULATION_FORMAT),...
+    leg_string(MODULATION_ORDERS(1)),...
+    leg_string(MODULATION_ORDERS(2)),...
+    leg_string(MODULATION_ORDERS(3)),...
+    leg_string(MODULATION_ORDERS(4)),...
+    leg_string(MODULATION_ORDERS(5)),...
+    "16-QAM (Paper)",...
+    "32-QAM (Paper)",...
+    "64-QAM (Paper)",...
+    "128-QAM (Paper)",...
+    "256-QAM (Paper)",...
     'Location', 'southwest');
 
 ylim([0, SNR_values(end)]);
@@ -89,7 +113,6 @@ ylabel('Minimum SNR (dB)');
 xlabel('Number of quantisation bits');
 
 full_plot = gcf;
-hold off;
 
 file_name = strcat(MODULATION_FORMAT, '_quant_SNR_plot_', num2str(DESIRED_NUM_BITS, 1), '_bits_', timestampString());
 exportPlotPDF(full_plot, file_name);
