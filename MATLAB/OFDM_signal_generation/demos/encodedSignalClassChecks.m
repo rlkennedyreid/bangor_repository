@@ -5,7 +5,7 @@ DESIRED_NUM_BITS = 1e6;
 
 NUM_SUBCARRIERS = 63;
 
-MODULATION_ORDERS = datasample(2.^[3,4,5], NUM_SUBCARRIERS)';
+MODULATION_ORDERS = datasample(2.^[3,4,5,6], NUM_SUBCARRIERS)';
 
 MODULATION_FORMATS = datasample(["QAM", "QAM_binary", "PSK"], NUM_SUBCARRIERS)';
 
@@ -55,12 +55,3 @@ construct_from_encoded = encodedSignal(MODULATION_FORMATS, MODULATION_ORDERS, mo
 assert(isequal(modulated_signal, copy_constructed, construct_from_encoded), "One of the class' constructors is incorrect");
 
 disp("Script successful!")
-
-
-% ofdm_signal = convertToOFDMSignal(modulated_signal, CYCLIC_PREFIX_LENGTH);
-% ofdm_signal = awgn(ofdm_signal, 10, 'measured');
-% 
-% extracted_modulated_signal = convertFromOFDMSignal(ofdm_signal, NUM_SUBCARRIERS, CYCLIC_PREFIX_LENGTH);
-% scatterplot(extracted_modulated_signal(:))
-% extracted_stream = decodeSignal(extracted_modulated_signal, MOD_ORDER, MODULATION_FORMAT);
-% [~, bit_error_rate, ~, ~] = calcErrorRates(extracted_stream, symbol_stream);

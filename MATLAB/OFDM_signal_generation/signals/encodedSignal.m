@@ -21,8 +21,10 @@ classdef encodedSignal
             
             % Make sure to use string arrays (i.e. "" rather than '')
             % otherwise dimensions are incorrect
-            assert( (isequal(size(MODULATION_FORMATS), size(MODULATION_ORDERS))), ...
-                "The formats and orders should be column vectors of equal size, given modulation information for each subcarrier");
+            
+            assert( isequal(size(MODULATION_FORMATS), size(MODULATION_ORDERS))...
+                && (size(MODULATION_FORMATS, 2) == 1), ...
+                "The formats and orders should be column vectors of equal size");
             
             obj.modulation_formats_ = MODULATION_FORMATS;
             obj.modulation_orders_ = MODULATION_ORDERS;
@@ -51,9 +53,7 @@ classdef encodedSignal
             for sub_index = 1:1:size(obj.modulation_formats_, 1)
                 decoded_stream(sub_index, :) = obj.decodeSubstream(obj.encoded_stream_(sub_index, :), obj.modulation_formats_(sub_index, :), obj.modulation_orders_(sub_index));
             end
-
         end
-
     end
     
     methods (Access = protected)
@@ -90,13 +90,11 @@ classdef encodedSignal
                 
             elseif strcmp(MODULATION_FORMAT, "PSK")
                 encoded_substream = pskmod(SYMBOL_STREAM, ORDER);
-                
+
                 norm_factor = modnorm(pskmod(0:(ORDER-1), ORDER), 'peakpow', 1.0);
                 encoded_substream = norm_factor*encoded_substream;
-
             else
                 error("Unknown argument for MODULATION_FORMAT");
-
             end
 
         end
@@ -124,9 +122,7 @@ classdef encodedSignal
             else
                 error("Unknown argument for MODULATION_FORMAT");
             end
-
         end
-        
     end
 end
 

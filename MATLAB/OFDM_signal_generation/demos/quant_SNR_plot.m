@@ -5,7 +5,7 @@ clearvars;
 % orders/formats
 
 % Modulation parameters
-MODULATION_FORMAT = 'QAM_binary';
+MODULATION_FORMAT = 'QAM';
 
 NUM_SUBCARRIERS = 63;
 
