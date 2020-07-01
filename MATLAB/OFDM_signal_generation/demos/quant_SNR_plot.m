@@ -1,20 +1,21 @@
 clearvars;
+clc;
 
 % Script to calculate the minimum SNR needed to establish a BER of 1e-3
 % for a range of quantisation bit numbers and varying modulation
 % orders/formats
 
 % Modulation parameters
-MODULATION_FORMAT = 'QAM';
+MODULATION_FORMAT = "QAM";
 
 NUM_SUBCARRIERS = 63;
 
-DESIRED_NUM_BITS = 1e5;
+DESIRED_NUM_BITS = 1e7;
 
 CYCLIC_PREFIX_LENGTH = 1/8; % Given as a ratio of symbol length
 
-SNR_values = linspace(5,35, 100);
-quantisation_bit_values = 1:1:15;
+SNR_values = linspace(5,35, 50);
+quantisation_bit_values = 1:1:16;
 
 % Number of unique symbols; powers of 2 starting from 16
 MODULATION_ORDERS = 2.^[4,5,6,7,8];
@@ -24,17 +25,19 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
     
     % Generate our random symbol stream
     
-    modulation_order = MODULATION_ORDERS(order_index);
-
-    [num_symbols_per_carrier, ~] = calcNumSymbolsPerCarrier(DESIRED_NUM_BITS, NUM_SUBCARRIERS, modulation_order);
-
-    symbol_stream = calcRandomSymbolStream(modulation_order,NUM_SUBCARRIERS, num_symbols_per_carrier);
+    modulation_order = repmat(MODULATION_ORDERS(order_index), [NUM_SUBCARRIERS, 1]);
+    
+    modulation_format = repmat(MODULATION_FORMAT, [NUM_SUBCARRIERS, 1]);
+    
+    [num_symbols_per_carrier, ~] = calcAdaptiveNumSymbolsPerCarrier(DESIRED_NUM_BITS, modulation_order);
+%     num_symbols_per_carrier = 100;
+    
+    symbol_stream = calcAdaptiveRandomSymbolStream(modulation_order, num_symbols_per_carrier);
     
     % Encode stream, then convert to OFDM
+    encoded_signal = encodedSignal(modulation_format, modulation_order, symbol_stream);
 
-    [encoded_signal] = encodeSignal(symbol_stream, modulation_order, MODULATION_FORMAT);
-
-    ofdm_signal = convertToOFDMSignal(encoded_signal, CYCLIC_PREFIX_LENGTH);
+    ofdm_signal = convertToOFDMSignal(encoded_signal.encoded_stream_, CYCLIC_PREFIX_LENGTH);
     
     % Hold our minimum SNR values as they are found. Pre-allocated to NaN
     % because if minimums are not found, these points will not be plotted
@@ -48,7 +51,8 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
     end
 
     for quant_index = 1:1:numel(quantisation_bit_values)
-        disp(strcat("Processing order ", num2str(modulation_order,'%u'), " with ", num2str(quant_index,'%u'), " quantisation bits"))
+        clc;
+        disp(strcat("Processing order index ", num2str(order_index,'%u'), " with ", num2str(quant_index,'%u'), " quantisation bits"));
 
         for SNR_index = 1:1:numel(SNR_values)
             
@@ -56,11 +60,11 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
 
             ofdm_signal_quantised = quantiseSignal(noisey_OFDM_signals(SNR_index, :), quantisation_bit_values(quant_index));
 
-            extracted_encoded_signal = convertFromOFDMSignal(ofdm_signal_quantised, NUM_SUBCARRIERS, CYCLIC_PREFIX_LENGTH);
+            converted_signal = convertFromOFDMSignal(ofdm_signal_quantised, NUM_SUBCARRIERS, CYCLIC_PREFIX_LENGTH);
+            
+            extracted_encoded_signal = encodedSignal(modulation_format, modulation_order, converted_signal, true);
 
-            extracted_stream = decodeSignal(extracted_encoded_signal, modulation_order, MODULATION_FORMAT);
-
-            [~, bit_error_rate, ~, ~] = calcErrorRates(extracted_stream, symbol_stream);
+            [~, bit_error_rate, ~, ~] = calcErrorRates(extracted_encoded_signal.decode(), symbol_stream);
             
             % Once we pass the threshold, log this minimum SNR and break
             % from the for loop, moving onto the nex quantisation-bit value
