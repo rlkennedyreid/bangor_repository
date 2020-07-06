@@ -30,7 +30,10 @@ for order_index = 1:1:numel(MODULATION_ORDERS)
     modulation_format = repmat(MODULATION_FORMAT, [NUM_SUBCARRIERS, 1]);
     
     [num_symbols_per_carrier, ~] = calcAdaptiveNumSymbolsPerCarrier(DESIRED_NUM_BITS, modulation_order);
-%     num_symbols_per_carrier = 100;
+    
+    if num_symbols_per_carrier < 100
+        num_symbols_per_carrier = 100;
+    end
     
     symbol_stream = calcAdaptiveRandomSymbolStream(modulation_order, num_symbols_per_carrier);
     
@@ -118,5 +121,5 @@ xlabel('Number of quantisation bits');
 
 full_plot = gcf;
 
-file_name = strcat(MODULATION_FORMAT, '_quant_SNR_plot_', num2str(DESIRED_NUM_BITS, 1), '_bits_', timestampString());
+file_name = strcat(MODULATION_FORMAT, '_quant_SNR_plot_min', num2str(DESIRED_NUM_BITS, 1), '_bits_', timestampString());
 exportPlotPDF(full_plot, file_name);
